@@ -1,5 +1,5 @@
 #Usando uma imagem base do Java com Maven
-FROM maven:3.8.6-openjdk-21 AS build
+FROM maven AS build
 
 #Definindo o diretório de trabalho
 WORKDIR /app
