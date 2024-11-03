@@ -8,9 +8,6 @@ WORKDIR /app
 COPY pom.xml .
 COPY src ./src
 
-#Executando o comando de build para criar o .jar
-RUN mvn clean package -DskipTests
-
 #Usando uma imagem base do Java para rodar a aplicação
 FROM openjdk:21-jdk
 
