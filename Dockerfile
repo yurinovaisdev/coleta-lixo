@@ -7,7 +7,7 @@ WORKDIR /app
 # Copiando o arquivo jar da sua aplicação para o contêiner
 COPY coletas.jar app.jar
 
-EXPOSE 8080
+EXPOSE 10000
 
 # Comando para rodar a aplicação
 ENTRYPOINT ["java", "-jar", "app.jar"]
