@@ -1,10 +1,10 @@
 name: Continuous Integration
 
 on:
-  pull_request:
-  push:
+  pull_request:  # Aciona para pull requests
+  push:          # Aciona para pushs
     branches:
-      - '*' 
+      - '*'  # Isso significa qualquer branch
 
 jobs:
   continuous-integration:
@@ -20,58 +20,16 @@ jobs:
           java-version: '21'
           distribution: 'adopt'
 
-      - name: Build
-        run: mvn clean install
-
-      - name: Start Application
-        run: |
-          nohup mvn spring-boot:run > application.log 2>&1 &  # Inicia a aplicação e salva logs
-          for i in {1..10}; do
-            if curl --silent http://localhost:8080; then
-              echo "Application is up!"
-              break
-            fi
-            echo "Waiting for the application to start..."
-            sleep 5
-          done
-
-      - name: Run Tests
-        run: mvn test # Roda os testes que acessam localhost:8080
-        env:
-          BASE_URL: "http://localhost:8080" # Usa a URL base correta nos testes
+      - name: Build and test
+        run: mvn clean test #Esse comando ai rodar os testes
 
   deploy:
     runs-on: ubuntu-latest
-    needs: continuous-integration
-    if: success()
+    needs: continuous-integration  # Esse job depende do anterior
+
+    if: success()  # Esse job só será executado se o job anterior for bem-sucedido
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Set up JDK
-        uses: actions/setup-java@v2
-        with:
-          java-version: '21'
-          distribution: 'adopt'
-
-      - name: Start Application for Deploy
-        run: |
-          nohup mvn spring-boot:run > application.log 2>&1 &
-          for i in {1..10}; do
-            if curl --silent http://localhost:8080; then
-              echo "Application is up!"
-              break
-            fi
-            echo "Waiting for the application to start..."
-            sleep 5
-          done
-
-      - name: Run Tests for Deploy
-        run: mvn test
-        env:
-          BASE_URL: "http://localhost:8080"
-
       - name: Deploy application
         run: |
           echo "Deploying application..."
