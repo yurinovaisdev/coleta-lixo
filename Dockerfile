@@ -15,7 +15,7 @@ FROM openjdk:21-jdk
 WORKDIR /app
 
 #Copiando o arquivo jar da aplicação do estágio de build
-COPY --from=build /app/target/coletas.jar app.jar
+COPY --from=build /app/coletas.jar app.jar
 
 #Externalizando a porta usada pela aplicação (8080, por exemplo)
 EXPOSE 8080
